@@ -4,6 +4,7 @@ class ChatBar extends Component {
   render() {
 
     const sendMsg = this.props.sendMsg;
+    const setUser = this.props.setUser
 
     const onKeyPress = (e) => {
       if (e.which == 13) {
@@ -12,10 +13,16 @@ class ChatBar extends Component {
       };
     }
 
+    const userForm = (e) => {
+      if (e.which == 13) {
+        setUser(e.target.value);
+      }
+    }
+
     return (
       <div>
         <footer className="chatbar">
-          <input className="chatbar-username" value={this.props.username} />
+          <input className="chatbar-username" onKeyPress={userForm} />
           <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyPress={onKeyPress} />
         </footer>
       </div>

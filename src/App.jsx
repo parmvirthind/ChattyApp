@@ -8,10 +8,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: ""}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
     };
     this.sendMsg = this.sendMsg.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
   componentDidMount() {
@@ -43,6 +44,10 @@ sendMsg(content) {
   this.exampleSocket.send(JSON.stringify(newMessage));
 }
 
+setUser(content) {
+  this.setState({currentUser: {name: content}});
+}
+
   render() {
     return (
       <div>
@@ -50,7 +55,7 @@ sendMsg(content) {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar sendMsg={this.sendMsg} username={this.state.currentUser.name} />
+        <ChatBar sendMsg={this.sendMsg} setUser={this.setUser} />
       </div>
     );
   }

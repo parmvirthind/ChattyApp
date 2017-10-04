@@ -9,18 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          id: 1,
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: 2,
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
+      messages: []
     };
     this.sendMsg = this.sendMsg.bind(this);
   }
@@ -41,12 +30,16 @@ class App extends Component {
     this.exampleSocket.onopen = (function(event) {
     console.log("Connection open");
     })
+    var theApp = this;
+    this.exampleSocket.onmessage = (function(event) {
+      const dataObject = JSON.parse(event.data);
+      const messages = theApp.state.messages.concat(dataObject);
+      theApp.setState({messages: messages});
+    })
   }
 
 sendMsg(content) {
-  const newMessage = {id:4, username: this.state.currentUser.name, content: content};
-  const messages = this.state.messages.concat(newMessage);
-  this.setState({messages: messages})
+  const newMessage = {username: this.state.currentUser.name, content: content};
   this.exampleSocket.send(JSON.stringify(newMessage));
 }
 

@@ -2,6 +2,8 @@ import React, { Component } from 'React';
 import Message from './Message.jsx';
 
 class MessageList extends Component {
+
+  // Set cases for different colors (4 possibilites)
   handleMessage(msg) {
     switch(msg.colorID) {
       case 1: 
@@ -23,9 +25,9 @@ class MessageList extends Component {
 
   render() {
 
+    // Map the array of messages
     const message = this.props.messages.map(msg => {
       return <div key={msg.id} className="message">
-        {/* <span className="message-username">{msg.username}</span> */}
         {this.handleMessage(msg)}
         <span className="message-content">{msg.content}</span>
       </div>

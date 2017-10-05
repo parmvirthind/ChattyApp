@@ -7,6 +7,7 @@ class ChatBar extends Component {
     const setUser = this.props.setUser;
     const setNotification = this.props.setNotification;
 
+    // Adding event handler for `enter` on message field
     const onKeyPress = (e) => {
       if (e.which == 13) {
         sendMsg(e.target.value);
@@ -14,6 +15,7 @@ class ChatBar extends Component {
       };
     }
 
+    // Adding event handler for `enter` on user field
     const userForm = (e) => {
       if (e.which == 13) {
         setUser(e.target.value);

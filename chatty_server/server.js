@@ -15,6 +15,7 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
+// Broadcast function
 wss.broadcast = function broadcast(data) {
       wss.clients.forEach(function each(client) {
         client.send(data);
@@ -26,7 +27,11 @@ wss.broadcast = function broadcast(data) {
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+
+  // Select a random number between 1 & 4
   let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
+
+  // Set online user object
   var onlineUsers = {
     type: "counter",
     userCount: wss.clients.size
@@ -35,6 +40,8 @@ wss.on('connection', (ws) => {
   wss.clients.forEach(function each(client) {
     client.send(onlineUsers);
   })
+
+  // Data that is `processed` everytime a message is received
   ws.on('message', (data) => {
     data = JSON.parse(data);
     switch (data.type) {

@@ -22,7 +22,6 @@ class App extends Component {
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
       const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
@@ -31,6 +30,8 @@ class App extends Component {
 
     this.exampleSocket = new WebSocket("ws://localhost:3001");
     var theApp = this;
+
+    // Receiving message from server
     this.exampleSocket.onmessage = (function(event) {
       const dataObject = JSON.parse(event.data);
       if(dataObject.type === "counter") {
@@ -46,11 +47,13 @@ class App extends Component {
 
   }
 
+// Send message to server
 sendMsg(content) {
   const newMessage = {type: 'postMessage', username: this.state.currentUser.name, colorID: this.state.currentUser.colorID, content: content};
   this.exampleSocket.send(JSON.stringify(newMessage));
 }
 
+// Set updated user info to server
 setUser(content) {
   if(!content) {
     this.setState({currentUser: {name: "Anonymous", colorID: "black"}});
@@ -60,6 +63,7 @@ setUser(content) {
   }
 }
 
+// Set notificatoin sent to server
 setNotification(content) {
   if(!content) {
     let updateName = {type: 'postNotification', username:"", content: this.state.currentUser.name + " has changed their name to Anonymous "};

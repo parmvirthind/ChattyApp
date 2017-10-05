@@ -36,9 +36,7 @@ class App extends Component {
       if(dataObject.type === "counter") {
         var numberOfUsers = dataObject.userCount;
         theApp.setState({userCount: numberOfUsers});
-        console.log("The State's number of users", dataObject);
       }
-      console.log("AYYYYY: ", dataObject);
       const messages = theApp.state.messages.concat(dataObject);
       theApp.setState({messages: messages});
     })
@@ -58,7 +56,6 @@ setUser(content) {
     this.setState({currentUser: {name: "Anonymous", colorID: "black"}});
   } else {
     let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
-    console.log("YOOOOOOOOOO: ", randomColor);
     this.setState({currentUser: {name: content, colorID: randomColor}});
   }
 }

@@ -3,7 +3,6 @@ import Message from './Message.jsx';
 
 class MessageList extends Component {
   handleMessage(msg) {
-    console.log("Test 3: ", msg);
     switch(msg.colorID) {
       case 1: 
         return (<span className="message-username firstUser">{msg.username}</span>)
@@ -27,8 +26,6 @@ class MessageList extends Component {
     const message = this.props.messages.map(msg => {
       return <div key={msg.id} className="message">
         {/* <span className="message-username">{msg.username}</span> */}
-        {console.log("Test 1: ", this.props.msg)}
-        {console.log("Test 2: ", msg)}
         {this.handleMessage(msg)}
         <span className="message-content">{msg.content}</span>
       </div>

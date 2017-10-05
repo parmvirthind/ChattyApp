@@ -24,7 +24,7 @@ class ChatBar extends Component {
     return (
       <div>
         <footer className="chatbar">
-          <input className="chatbar-username" onKeyPress={userForm} />
+          <input className="chatbar-username" onKeyPress={userForm} placeholder="Your Name (optional)" />
           <input className="chatbar-message" placeholder="Type a message and hit ENTER" onKeyPress={onKeyPress} />
         </footer>
       </div>

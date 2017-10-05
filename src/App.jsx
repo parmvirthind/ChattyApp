@@ -9,7 +9,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      messages: [],
+      userCount: 0
     };
     this.sendMsg = this.sendMsg.bind(this);
     this.setUser = this.setUser.bind(this);
@@ -29,15 +30,22 @@ class App extends Component {
     }, 3000);
 
     this.exampleSocket = new WebSocket("ws://localhost:3001");
-    this.exampleSocket.onopen = (function(event) {
-    console.log("Connection open");
-    })
     var theApp = this;
     this.exampleSocket.onmessage = (function(event) {
       const dataObject = JSON.parse(event.data);
+      console.log(dataObject);
+      if(dataObject.type === "counter") {
+        var numberOfUsers = dataObject.userCount;
+        theApp.setState({userCount: numberOfUsers});
+        console.log("The State's number of users", dataObject);
+      }
       const messages = theApp.state.messages.concat(dataObject);
       theApp.setState({messages: messages});
     })
+    this.exampleSocket.onopen = (function(event) {
+    console.log("Connection open");
+    })
+
   }
 
 sendMsg(content) {
@@ -58,11 +66,13 @@ setNotification(content) {
   this.exampleSocket.send(JSON.stringify(updateName));
 }
 
+
   render() {
     return (
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <p>Number of Users:{this.state.userCount}</p>
         </nav>
         <MessageList messages={this.state.messages} />
         <ChatBar setNotification={this.setNotification} sendMsg={this.sendMsg} setUser={this.setUser} />

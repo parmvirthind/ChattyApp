@@ -4,7 +4,8 @@ class ChatBar extends Component {
   render() {
 
     const sendMsg = this.props.sendMsg;
-    const setUser = this.props.setUser
+    const setUser = this.props.setUser;
+    const setNotification = this.props.setNotification;
 
     const onKeyPress = (e) => {
       if (e.which == 13) {
@@ -16,6 +17,7 @@ class ChatBar extends Component {
     const userForm = (e) => {
       if (e.which == 13) {
         setUser(e.target.value);
+        setNotification(e.target.value);
       }
     }
 

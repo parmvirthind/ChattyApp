@@ -8,11 +8,12 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: ""}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
     };
     this.sendMsg = this.sendMsg.bind(this);
     this.setUser = this.setUser.bind(this);
+    this.setNotification = this.setNotification.bind(this);
   }
 
   componentDidMount() {
@@ -40,12 +41,21 @@ class App extends Component {
   }
 
 sendMsg(content) {
-  const newMessage = {username: this.state.currentUser.name, content: content};
+  const newMessage = {type: 'postMessage', username: this.state.currentUser.name, content: content};
   this.exampleSocket.send(JSON.stringify(newMessage));
 }
 
 setUser(content) {
-  this.setState({currentUser: {name: content}});
+  if(!content) {
+    this.setState({currentUser: {name: "Anonymous"}});
+  } else {
+      this.setState({currentUser: {name: content}});
+    } 
+}
+
+setNotification(content) {
+  const updateName = {type: 'postNotification', username:"", content: this.state.currentUser.name + " has changed their name to " + content};
+  this.exampleSocket.send(JSON.stringify(updateName));
 }
 
   render() {
@@ -55,7 +65,7 @@ setUser(content) {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar sendMsg={this.sendMsg} setUser={this.setUser} />
+        <ChatBar setNotification={this.setNotification} sendMsg={this.sendMsg} setUser={this.setUser} />
       </div>
     );
   }

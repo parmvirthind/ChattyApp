@@ -55,8 +55,8 @@ setUser(content) {
   if(!content) {
     this.setState({currentUser: {name: "Anonymous", colorID: "black"}});
   } else {
-    let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
-    this.setState({currentUser: {name: content, colorID: randomColor}});
+    // let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
+    this.setState({currentUser: {name: content}});
   }
 }
 
@@ -75,7 +75,7 @@ setNotification(content) {
     return (
       <div>
         <nav className="navbar">
-          <a href="/" className="navbar-brand">Chatty</a>
+          <a href="/" className="navbar-brand">notFacebook</a>
           <p>Number of Users: {this.state.userCount}</p>
         </nav>
         <MessageList messages={this.state.messages} />

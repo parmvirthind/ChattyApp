@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous", colorID: "" }, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
       userCount: 0
     };
@@ -33,12 +33,12 @@ class App extends Component {
     var theApp = this;
     this.exampleSocket.onmessage = (function(event) {
       const dataObject = JSON.parse(event.data);
-      console.log(dataObject);
       if(dataObject.type === "counter") {
         var numberOfUsers = dataObject.userCount;
         theApp.setState({userCount: numberOfUsers});
         console.log("The State's number of users", dataObject);
       }
+      console.log("AYYYYY: ", dataObject);
       const messages = theApp.state.messages.concat(dataObject);
       theApp.setState({messages: messages});
     })
@@ -49,21 +49,28 @@ class App extends Component {
   }
 
 sendMsg(content) {
-  const newMessage = {type: 'postMessage', username: this.state.currentUser.name, content: content};
+  const newMessage = {type: 'postMessage', username: this.state.currentUser.name, colorID: this.state.currentUser.colorID, content: content};
   this.exampleSocket.send(JSON.stringify(newMessage));
 }
 
 setUser(content) {
   if(!content) {
-    this.setState({currentUser: {name: "Anonymous"}});
+    this.setState({currentUser: {name: "Anonymous", colorID: "black"}});
   } else {
-      this.setState({currentUser: {name: content}});
-    } 
+    let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
+    console.log("YOOOOOOOOOO: ", randomColor);
+    this.setState({currentUser: {name: content, colorID: randomColor}});
+  }
 }
 
 setNotification(content) {
-  const updateName = {type: 'postNotification', username:"", content: this.state.currentUser.name + " has changed their name to " + content};
-  this.exampleSocket.send(JSON.stringify(updateName));
+  if(!content) {
+    let updateName = {type: 'postNotification', username:"", content: this.state.currentUser.name + " has changed their name to Anonymous "};
+    this.exampleSocket.send(JSON.stringify(updateName));
+  } else {
+    let updateName = {type: 'postNotification', username:"", content: this.state.currentUser.name + " has changed their name to " + content};
+    this.exampleSocket.send(JSON.stringify(updateName));
+  }
 }
 
 
@@ -72,7 +79,7 @@ setNotification(content) {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
-          <p>Number of Users:{this.state.userCount}</p>
+          <p>Number of Users: {this.state.userCount}</p>
         </nav>
         <MessageList messages={this.state.messages} />
         <ChatBar setNotification={this.setNotification} sendMsg={this.sendMsg} setUser={this.setUser} />

@@ -32,7 +32,7 @@ wss.on('connection', (ws) => {
   let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
 
   // Set online user object
-  var onlineUsers = {
+  let onlineUsers = {
     type: "counter",
     userCount: wss.clients.size
   }

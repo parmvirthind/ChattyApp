@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Anonymous", colorID: "" }, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous", colorID: "" },
       messages: [],
       userCount: 0
     };
@@ -19,37 +19,33 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
 
     this.exampleSocket = new WebSocket("ws://localhost:3001");
-    var theApp = this;
+    let theApp = this;
 
     // Receiving message from server
     this.exampleSocket.onmessage = (function(event) {
       const dataObject = JSON.parse(event.data);
       if(dataObject.type === "counter") {
-        var numberOfUsers = dataObject.userCount;
+        let numberOfUsers = dataObject.userCount;
         theApp.setState({userCount: numberOfUsers});
       }
       const messages = theApp.state.messages.concat(dataObject);
       theApp.setState({messages: messages});
     })
     this.exampleSocket.onopen = (function(event) {
-    console.log("Connection open");
+      console.log("Connection open");
     })
 
   }
 
 // Send message to server
 sendMsg(content) {
-  const newMessage = {type: 'postMessage', username: this.state.currentUser.name, colorID: this.state.currentUser.colorID, content: content};
+  const newMessage = {type: 'postMessage', 
+                      username: this.state.currentUser.name, 
+                      colorID: this.state.currentUser.colorID, 
+                      content: content
+                    };
   this.exampleSocket.send(JSON.stringify(newMessage));
 }
 
@@ -58,20 +54,25 @@ setUser(content) {
   if(!content) {
     this.setState({currentUser: {name: "Anonymous", colorID: "black"}});
   } else {
-    // let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
-    this.setState({currentUser: {name: content}});
-  }
+      this.setState({currentUser: {name: content}});
+    }
 }
 
 // Set notificatoin sent to server
 setNotification(content) {
   if(!content) {
-    let updateName = {type: 'postNotification', username:"", content: this.state.currentUser.name + " has changed their name to Anonymous "};
+    let updateName = {type: 'postNotification', 
+                      username:"", 
+                      content: this.state.currentUser.name + " has changed their name to Anonymous "
+                    };
     this.exampleSocket.send(JSON.stringify(updateName));
   } else {
-    let updateName = {type: 'postNotification', username:"", content: this.state.currentUser.name + " has changed their name to " + content};
-    this.exampleSocket.send(JSON.stringify(updateName));
-  }
+      let updateName = {type: 'postNotification', 
+                        username:"", 
+                        content: this.state.currentUser.name + " has changed their name to " + content
+                      };
+      this.exampleSocket.send(JSON.stringify(updateName));
+    }
 }
 
 

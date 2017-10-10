@@ -17,7 +17,7 @@ class ChatBar extends Component {
 
     // Adding event handler for `enter` on user field
     const userForm = (e) => {
-      if (e.which == 13) {
+      if(e.which == 13) {
         setUser(e.target.value);
         setNotification(e.target.value);
       }
@@ -37,5 +37,3 @@ class ChatBar extends Component {
 export default ChatBar;
 
 
-
-// e.target.value

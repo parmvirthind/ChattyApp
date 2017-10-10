@@ -29,7 +29,9 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
 
   // Select a random number between 1 & 4
-  let randomColor = Math.floor(Math.random() * (4 - 1 + 1)) + 1;
+  let randomColor = Math.floor(Math.random() * (4));
+  let colorArray = ['red', 'blue', 'green', 'purple']
+  let color = colorArray[randomColor];
 
   // Set online user object
   let onlineUsers = {
@@ -48,7 +50,7 @@ wss.on('connection', (ws) => {
       case 'postMessage':
         data.id = uuidv1();
         data.type = "incomingMessage";
-        data.colorID = randomColor;
+        data.colorID = color;
         data = JSON.stringify(data);
         break;
       case 'postNotification':
